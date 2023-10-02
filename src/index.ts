@@ -1,9 +1,10 @@
 import fastify from "fastify";
-
+import dotenv from "dotenv";
+dotenv.config();
 const server = fastify({
   logger: false,
 });
-
+server.register(import("./domains/auth/auth.route.js")); // credentials auth routes
 server.get("/", async (request, reply) => {
   reply.send(request.url);
 });
