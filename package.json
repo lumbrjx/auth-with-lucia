@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "run-p -s build:*",
+    "build:main": "babel -x .ts -d dist src",
+    "build:types": "tsc",
     "start": "node index.js",
     "dev": "nodemon --watch src src/index.ts"
   },
