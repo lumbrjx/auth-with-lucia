@@ -2,15 +2,15 @@ version: "3"
 services:
   prisma-mysql:
     image: mysql:latest
-    container_name: mysql-container-lucia
+    container_name: mysql-container-luciak
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: mysql-image-database1
+      MYSQL_DATABASE: mysql-image-database1k
     ports:
       - "3306:3306"
   prisma-redis:
     image: redis:latest
-    container_name: redis-container-lucia
+    container_name: redis-container-luciak
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:

@@ -11,6 +11,10 @@ const redis_client = redisClient;
 export const auth = lucia({
   env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
   middleware: fastify(),
+  csrfProtection: false,
+  experimental: {
+    debugMode: true,
+  },
   adapter: {
     user: prisma(prisma_client),
     session: ioredis(redis_client),

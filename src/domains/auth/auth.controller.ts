@@ -44,6 +44,7 @@ export async function registerController(
 }
 
 export async function loginController(req: FastifyRequest, res: FastifyReply) {
+  console.log("body form front", req.body);
   const validForm = LoginSchema.safeParse(req.body);
   if (validForm.success !== true) {
     return res.code(403).send(validForm.error);
@@ -62,7 +63,7 @@ export async function loginController(req: FastifyRequest, res: FastifyReply) {
     });
     const authRequest = auth.handleRequest(req, res);
     authRequest.setSession(session);
-    auth.createSessionCookie(session);
+    // auth.createSessionCookie(session);
 
     // redirect to profile page
     return res.status(200).redirect("/");
