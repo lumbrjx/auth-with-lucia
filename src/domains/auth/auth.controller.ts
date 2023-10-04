@@ -73,3 +73,16 @@ export async function loginController(req: FastifyRequest, res: FastifyReply) {
     return res.status(500).send("An unknown error occurred");
   }
 }
+export async function logoutController(req: FastifyRequest, res: FastifyReply) {
+  const authRequest = auth.handleRequest(req, res);
+  const session = await authRequest.validate(); // or `authRequest.validateBearerToken()`
+  if (!session) {
+    return res.status(401);
+  }
+  await auth.invalidateSession(session.sessionId);
+
+  authRequest.setSession(null); // for session cookie
+
+  // redirect back to login page
+  return res.status(200).redirect("/");
+}

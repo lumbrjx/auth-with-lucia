@@ -1,11 +1,17 @@
 // import { auth } from "../../config/lucia";
 import { FastifyInstance } from "fastify";
-import { registerController, loginController } from "./auth.controller.js";
+import {
+  registerController,
+  loginController,
+  logoutController,
+} from "./auth.controller.js";
 import redisClient from "../../config/redis-client.js";
 
 export default async function (app: FastifyInstance) {
   app.post("/login", loginController);
   app.post("/register", registerController);
+  app.get("/logout", logoutController);
+
   app.get("/getAllRecords", async (request: any, reply: any) => {
     try {
       const keys = await redisClient.keys("*"); // Get all keys
