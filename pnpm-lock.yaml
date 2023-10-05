@@ -14,6 +14,9 @@ dependencies:
   '@lucia-auth/adapter-session-redis':
     specifier: ^2.1.1
     version: 2.1.1(ioredis@5.3.2)(lucia@2.7.1)
+  '@lucia-auth/oauth':
+    specifier: ^3.3.0
+    version: 3.3.0(lucia@2.7.1)
   '@prisma/client':
     specifier: ^5.3.1
     version: 5.3.1(prisma@5.3.1)
@@ -135,6 +138,14 @@ packages:
         optional: true
     dependencies:
       ioredis: 5.3.2
+      lucia: 2.7.1
+    dev: false
+
+  /@lucia-auth/oauth@3.3.0(lucia@2.7.1):
+    resolution: {integrity: sha512-vb9BBcZXOeeijGndnvq/AoJJZU6MAKG7UCqV1n9tQ81edSPaWZWsxSDrDjmNFrY0tSyATZMWo/LXbzt/WQdKdA==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
       lucia: 2.7.1
     dev: false
 

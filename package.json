@@ -16,6 +16,7 @@
     "@fastify/cors": "7.0.0",
     "@lucia-auth/adapter-prisma": "^3.0.2",
     "@lucia-auth/adapter-session-redis": "^2.1.1",
+    "@lucia-auth/oauth": "^3.3.0",
     "@prisma/client": "^5.3.1",
     "@types/node": "^20.8.0",
     "dotenv": "^16.3.1",

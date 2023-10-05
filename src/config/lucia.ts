@@ -6,6 +6,7 @@ import { ioredis } from "@lucia-auth/adapter-session-redis";
 import prismaClient from "./prisma-client.js";
 import redisClient from "./redis-client.js";
 import "lucia/polyfill/node";
+import { google } from "@lucia-auth/oauth/providers";
 const prisma_client = prismaClient;
 const redis_client = redisClient;
 export const auth = lucia({
@@ -25,5 +26,10 @@ export const auth = lucia({
     };
   },
 });
-
+export const googleAuth = google(auth, {
+  clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+  redirectUri: "http://localhost:8080/login/google/callback",
+  scope: ["profile", "email"],
+});
 export type Auth = typeof auth;

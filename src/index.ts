@@ -6,7 +6,7 @@ const server = fastify({
 });
 
 server.register(import("./domains/auth/auth.route.js")); // credentials auth routes
-server.register(import("./domains/admin/admin.route.js"));
+server.register(import("./domains/admin/admin.route.js")); // admin route
 server.get("/", async (request, reply) => {
   reply.send(request.headers);
 });

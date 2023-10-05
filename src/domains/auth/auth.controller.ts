@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { auth } from "../../config/lucia.js";
+import { auth, googleAuth } from "../../config/lucia.js";
 import { LoginSchema, RegisterSchema } from "./auth.model.js";
-
+import { serializeCookie, parseCookie } from "lucia/utils";
+import { google } from "@lucia-auth/oauth/providers";
 export async function registerController(
   req: FastifyRequest,
   res: FastifyReply
@@ -85,4 +86,70 @@ export async function logoutController(req: FastifyRequest, res: FastifyReply) {
 
   // redirect back to login page
   return res.status(200).redirect("/");
+}
+export async function googleOAuthController(
+  req: FastifyRequest,
+  res: FastifyReply
+) {
+  const [url, state] = await googleAuth.getAuthorizationUrl();
+  const stateCookie = serializeCookie("google_oauth_state", state, {
+    httpOnly: true,
+    secure: false, // `true` for production
+    path: "/",
+    maxAge: 60 * 60,
+  });
+
+  // console.log(url);
+  return res.header("Set-Cookie", stateCookie).redirect(url.toString());
+  // auth.createSessionCookie(state);
+}
+export async function callbackController(
+  req: FastifyRequest,
+  res: FastifyReply
+) {
+  const cookies = parseCookie(req.headers.cookie ?? "");
+  const storedState = cookies.google_oauth_state;
+  const query: any = req.query;
+  const code = query.code;
+  const state = query.state;
+
+  // validate state
+  if (!storedState || !state || storedState !== state || !code) {
+    return new Response(null, {
+      status: 400,
+    });
+  }
+  try {
+    const { getExistingUser, googleUser, createUser } =
+      await googleAuth.validateCallback(code);
+    console.log(googleUser);
+    const getUser = async () => {
+      const existingUser = await getExistingUser();
+      console.log("dsqfqsdfqsdfqsdqsdfqsdfqsdfqsd");
+      if (existingUser) return existingUser;
+      const user = await createUser({
+        attributes: {
+          username: googleUser.name,
+          email: googleUser.email as string,
+          password: googleUser.sub,
+        },
+      });
+      return user;
+    };
+    const user = await getUser();
+
+    const session = await auth.createSession({
+      userId: user.userId,
+      attributes: {},
+    });
+    const authRequest = auth.handleRequest(req, res);
+    authRequest.setSession(session);
+    auth.createSessionCookie(session);
+    // redirect to profile page
+    return res
+      .header("Set-Cookie", "google_oauth_state=; Max-Age=0; Path=/;")
+      .redirect("/");
+  } catch (e) {
+    return res.status(500);
+  }
 }
