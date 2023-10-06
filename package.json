@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node index.js",
-    "dev": "nodemon --watch src src/index.ts"
+    "dev": "nodemon --watch src src/index.ts",
+    "postinstall": "prisma generate"
   },
   "type": "module",
   "keywords": [],
