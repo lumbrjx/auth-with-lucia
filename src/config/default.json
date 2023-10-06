@@ -1,0 +1,10 @@
+{
+  "home": "/",
+  "login": "/login",
+  "register": "/register",
+  "logout": "/logout",
+  "oauthStartUrl": "/login/google",
+  "oauthRedirectUri": "http://localhost:8080/login/google/callback",
+  "oauthCallback": "/login/google/callback",
+  "dashboard": "/dashboard"
+}

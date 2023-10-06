@@ -7,17 +7,14 @@ export default async function checkBeforeAuth(
 ) {
   try {
     const authRequest = auth.handleRequest(req, res);
-
-    const session = await authRequest.validate(); // or `authRequest.validateBearerToken()`
+    const session = await authRequest.validate();
     if (session) {
-      console.log("u're already signed in");
-      return res.code(400).redirect("http://localhost:8080/");
+      return res
+        .code(400)
+        .send("already signed in")
+        .redirect("http://localhost:8080/");
     }
-
-    // Access the Redis client through the fastify instance
   } catch (err) {
-    console.log("Error while trying to authenticate, Please login again.");
-
-    return res.code(500).redirect("http://localhost:8080/");
+    return res.code(500).send(err).redirect("http://localhost:8080/");
   }
 }

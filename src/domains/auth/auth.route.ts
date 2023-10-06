@@ -9,17 +9,27 @@ import {
 } from "./auth.controller.js";
 import redisClient from "../../config/redis-client.js";
 import checkBeforeAuth from "../../middlewares/checkbeforeAuth.js";
+import * as routeConfig from "../../config/default.json";
 
 export default async function (app: FastifyInstance) {
-  app.post("/login", { preHandler: checkBeforeAuth }, loginController);
-  app.post("/register", { preHandler: checkBeforeAuth }, registerController);
-  app.get("/logout", logoutController);
+  app.post(
+    routeConfig.default.login,
+    { preHandler: checkBeforeAuth },
+    loginController
+  );
+  app.post(
+    routeConfig.default.register,
+    { preHandler: checkBeforeAuth },
+    registerController
+  );
+  app.get(routeConfig.default.logout, logoutController);
   app.get(
-    "/login/google",
+    routeConfig.default.oauthStartUrl,
     { preHandler: checkBeforeAuth },
     googleOAuthController
   );
-  app.get("/login/google/callback", callbackController);
+  app.get(routeConfig.default.oauthCallback, callbackController);
+  // Dev function
   app.get("/getAllRecords", async (request: any, reply: any) => {
     try {
       const keys = await redisClient.keys("*"); // Get all keys
