@@ -8,12 +8,17 @@ import {
   callbackController,
 } from "./auth.controller.js";
 import redisClient from "../../config/redis-client.js";
+import checkBeforeAuth from "../../middlewares/checkbeforeAuth.js";
 
 export default async function (app: FastifyInstance) {
-  app.post("/login", loginController);
-  app.post("/register", registerController);
+  app.post("/login", { preHandler: checkBeforeAuth }, loginController);
+  app.post("/register", { preHandler: checkBeforeAuth }, registerController);
   app.get("/logout", logoutController);
-  app.get("/login/google", googleOAuthController);
+  app.get(
+    "/login/google",
+    { preHandler: checkBeforeAuth },
+    googleOAuthController
+  );
   app.get("/login/google/callback", callbackController);
   app.get("/getAllRecords", async (request: any, reply: any) => {
     try {
